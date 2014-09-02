@@ -1,17 +1,28 @@
-## LSHHDC : Locality-Sensitive Hashing based High Dimensional  Clustering  
+## pLSHHDC : Parallel Locality-Sensitive Hashing based High Dimensional Clustering  
 
-## Locality-sensitive hashing  
-Unlike cryptographic hashing where the goal is to map objects to
-numbers with a low collision rate and high randomness, the goal of LSH
-is to map similar elements to similar keys with high probability.
+Based on Rajamaran, "Mining of Massive Datasets" - (Section 3.4)[http://infolab.stanford.edu/~ullman/mmds/ch3.pdf]
 
-An obvious use of this technique is clustering.  From Rajamaran,
-"Mining of Massive Datasets":
+A parallel implementation of LSH for High Dimensional Clustering.
+- Documents or sets are represented by a (MinHash)[http://en.wikipedia.org/wiki/MinHash] signature.
+- (LSH)[http://en.wikipedia.org/wiki/Locality-sensitive_hashing] is used to map similar signatures to similar bins.
+- Items which map to the same bin are considered candidate pairs for clustering.
+- A constraint function (currently Levenshtein distance) is applied to candidate pairs.
+- Items which satisfy constraint function are clustered via (UnionFind)[http://en.wikipedia.org/wiki/Disjoint-set_data_structure].
 
-> A family F of functions is said to be (d1, d2, p1, p2)-sensitive if
-> for every f in F:  
-> 1. If d(x,y) ≤ d1, then the probability that f(x) = f(y) is at least p1.  
-> 2. If d(x,y) ≥ d2, then the probability that f(x) = f(y) is at most p2.  
+Signatures can be pre-computed (in parallel) and stored using the MinHasher.
+Clusters should be built from MinHash signatures.
+Constraint checking currently uses the Levenshtein distance of the actual documents stored in a JsonLevelDB database.
 
+Summary of changes:
+- Updated to use murmur3 hash (for signatures and LSH)
+- Unicode support
+- De-coupled clustering from signature creation to allow
+  parallel and pre-computation of signatures
+- Ability to dump/load signer state to disk
+- Constraint function checking for candidate pairs
+- Native parallel processing for constraint checks
+- Methods to help serialize cluster state to disk
 
+Requires the C-based pyhash, python-Levenshtein, and leveldb libraries
 
+TODO: Remove LevelDB dependency, improve generality of constraint checking.
