@@ -4,15 +4,6 @@ lsh.py
 Algorithms based on 'Mining of Massive Datasets'
 http://infolab.stanford.edu/~ullman/mmds/ch3.pdf - Section 3.4
 
-Original from https://github.com/go2starr/lshhdc/
-+ Updated to use murmur3 hash (for signatures and LSH)
-+ Unicode support
-+ De-coupled clustering from signature creation to allow
-  parallel and pre-computation of signatures
-+ Ability to dump/load signer state to disk
-+ Constraint function checking for candidate pairs
-+ Native parallel processing for constraint checks
-+ Methods to help serialize cluster state to disk
 """
 from unionfind import UnionFind
 from collections import defaultdict
