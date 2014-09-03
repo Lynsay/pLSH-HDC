@@ -27,6 +27,6 @@ Summary of changes:
 
 Requires the C/C++ based `pyhash`, `python-Levenshtein`, and `leveldb` libraries. These can be installed via pip:
 
-    pip install pyhash, python-Levenshtein, leveldb
+    pip install pyhash python-Levenshtein leveldb
 
 TODO: Remove LevelDB dependency, improve generality of constraint checking, update tests.
