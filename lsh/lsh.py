@@ -5,7 +5,7 @@ Algorithms based on 'Mining of Massive Datasets'
 http://infolab.stanford.edu/~ullman/mmds/ch3.pdf - Section 3.4
 
 """
-from unionfind import UnionFind
+
 from collections import defaultdict
 import multiprocessing as mp
 import random
@@ -13,8 +13,24 @@ import pyhash
 import Levenshtein
 
 from jsonleveldb import JsonLevelDB
+from .unionfind import UnionFind
 
-class MinHashSignature(object):
+class Signature(object):
+    """Signature Base class."""
+
+    def __init__(self, dim):
+        self.dim = dim
+        self.hashes = self.hash_functions()
+
+    def hash_functions(self):
+        """Returns dim different hash functions"""
+        pass
+
+    def sign(self, object):
+        """Return the signature for object s"""
+        pass
+
+class MinHashSignature(Signature):
     """Creates signatures for sets/tuples using minhash."""
     def __init__(self, dim, seeds=None):
         self.dim = dim
@@ -224,11 +240,17 @@ def shingle(s, k):
     for i in range(len(s) - k + 1):
         yield s[i:i+k]
 
+def hshingle(s, k):
+    """Generate k-length shingles then hash"""
+    for s in shingle(s, k):
+        yield hash(s)
+
 def jaccard_sim(X, Y):
     x = set(X)
     y = set(Y)
     """Jaccard similarity between two sets"""
     return float(len(x & y)) / len(x | y)
+
 
 def jaccard_dist(X, Y):
     """Jaccard distance between two sets"""
